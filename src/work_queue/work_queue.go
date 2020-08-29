@@ -12,18 +12,28 @@ type WorkQueue struct {
 
 // Create a new work queue capable of doing nWorkers simultaneous tasks, expecting to queue maxJobs tasks.
 func Create(nWorkers uint, maxJobs uint) *WorkQueue {
-	workQueue := new(WorkQueue)
+	queue := new(WorkQueue)
 
 	// make channels for jobs going into the queue and results coming out
-	workQueue.Jobs = make(chan Worker, maxJobs)
-	workQueue.Results = make(chan interface{}, maxJobs)
+	queue.Jobs = make(chan Worker, maxJobs)
+	queue.Results = make(chan interface{}, maxJobs)
 
 	// create worker goroutines to watch the Jobs queue for work
 	for i := 0; i < int(nWorkers); i++{
-		go workQueue.worker()
+		go queue.worker()
 	}
 
-	return workQueue
+	return queue
+}
+
+// A worker goroutine that processes tasks from .Jobs unless .StopRequests has a message saying to halt now.
+func (queue workQueue) worker() {
+	select {
+		case job := <- queue.Jobs:
+			queue.Results <- job.Runs()
+		default:
+			close(queue.Jobs)
+	}
 }
 
 
