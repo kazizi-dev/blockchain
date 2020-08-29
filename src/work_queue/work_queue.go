@@ -10,6 +10,8 @@ type WorkQueue struct {
 	Results chan interface{}
 }
 
+//var wg sync.WaitGroup
+
 // Create a new work queue capable of doing nWorkers simultaneous tasks, expecting to queue maxJobs tasks.
 func Create(nWorkers uint, maxJobs uint) *WorkQueue {
 	queue := new(WorkQueue)
@@ -27,13 +29,19 @@ func Create(nWorkers uint, maxJobs uint) *WorkQueue {
 }
 
 // A worker goroutine that processes tasks from .Jobs unless .StopRequests has a message saying to halt now.
-func (queue workQueue) worker() {
-	select {
-		case job := <- queue.Jobs:
-			queue.Results <- job.Runs()
-		default:
-			close(queue.Jobs)
+func (queue WorkQueue) worker() {
+	for job := range queue.Jobs {
+		// runs jobs and return values back to the channel
+		queue.Results <- job.Run()
 	}
 }
 
+// Put the work into the Jobs channel so a worker can find it and start the task.
+func (queue WorkQueue) Enqueue(work Worker) {
+	queue.Jobs <- work
+}
 
+// Close .Jobs and remove all remaining jobs from the channel.
+func (queue WorkQueue) Shutdown() {
+	// TODO
+}
