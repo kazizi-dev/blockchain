@@ -34,6 +34,7 @@ func (queue WorkQueue) worker() {
 		// runs jobs and return values back to the channel
 		queue.Results <- job.Run()
 	}
+//	close(queue.Results)
 }
 
 // Put the work into the Jobs channel so a worker can find it and start the task.
@@ -43,5 +44,5 @@ func (queue WorkQueue) Enqueue(work Worker) {
 
 // Close .Jobs and remove all remaining jobs from the channel.
 func (queue WorkQueue) Shutdown() {
-	// TODO
+	close(queue.Jobs)
 }
