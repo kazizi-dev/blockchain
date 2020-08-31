@@ -23,7 +23,7 @@ func isValidFirstBlock(blk Block) bool {
 	}
 
 	// check if the block's previous hash has all null bytes
-	for i := 0; i < len(blk.PrevHash); i++ }
+	for i := 0; i < len(blk.PrevHash); i++ {
 		if blk.PrevHash[i] != 0 {
 			return false
 		}
@@ -44,8 +44,8 @@ func (chain Blockchain) IsValid() bool {
 
 	counter := 1
 	for i := 0; i < len(chain.Chain)-1; i++{
-		blk1 = chain.Chain[i]
-		blk2 = chain.Chain[counter]
+		blk1 := chain.Chain[i]
+		blk2 := chain.Chain[counter]
 
 		// both blocks must have the same difficulty value
 		if blk1.Difficulty != blk2.Difficulty {
@@ -57,8 +57,13 @@ func (chain Blockchain) IsValid() bool {
 			return false
 		}
 
+		// each block previous hash matches the previous block hash
+		if !bytes.Equal(blk1.Hash, blk2.PrevHash){
+			return false
+		}
+
 		// each block has the right hash value
-		if !bytes.Equal(blk1.Hash, blk1.CalcHash){
+		if !bytes.Equal(blk1.Hash, blk1.CalcHash()){
 			return false
 		}
 
