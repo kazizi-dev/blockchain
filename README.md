@@ -21,3 +21,16 @@ A blockchain program that calculates and processes hash codes.
 
 **mining.go**
 - Mines the blocks in the blockchain
+
+
+## Setup:
+- Install Golang
+- Clone this repository
+- Enter blockchain-go directory
+		cd blockchain-go
+- Set GOPATH
+		 export GOPATH=`pwd`
+- To test Work Queue
+         go test work_queue -v
+- To test Blockchain
+         go test blockchain -v 
