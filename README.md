@@ -1,5 +1,5 @@
 # blockchain-go
-A blockchain program that calculates and processes hash codes.
+A program that creates a blockchain, and each block inside the chain is created from the data of previous block.
 
 ## Features:
 
