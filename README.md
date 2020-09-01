@@ -1,5 +1,5 @@
 # blockchain-go
-A program that creates a blockchain, and each block inside the chain is created from the data of previous block.
+A program that creates a blockchain, and each block inside the chain is created from the data of previous block. The goal was to practice concurrency in Go using Goroutines.
 
 ## Features:
 
